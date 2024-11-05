@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import MealForm from './components/MealForm';
 import MealList from './components/MealList';
 import TrainingForm from './components/TrainingForm';
@@ -18,6 +18,13 @@ function App() {
     setTrainingEntries([training, ...trainingEntries]);
   };
 
+  const handleReset = () => {
+    setMealEntries([]);
+    setTrainingEntries([]);
+    localStorage.removeItem('mealEntries');
+    localStorage.removeItem('trainingEntries');
+  };
+
   return (
     <div className="container">
       <h1>Calorie Counter</h1>
@@ -25,16 +32,21 @@ function App() {
       <section>
         <h2>Meals</h2>
         <MealForm onAddMeal={handleAddMeal} />
-        <MealList entries={mealEntries}/>
+        <MealList entries={mealEntries} />
       </section>
 
       <section>
         <h2>Training</h2>
         <TrainingForm onAddTraining={handleAddTraining} />
-        <TrainingList entries={trainingEntries}/>
+        <TrainingList entries={trainingEntries} />
       </section>
 
-      <CalorieSummary mealEntries={mealEntries} trainingEntries={trainingEntries} />
+      <CalorieSummary
+        mealEntries={mealEntries}
+        trainingEntries={trainingEntries}
+      />
+
+      <button onClick={handleReset}>Reset</button>
     </div>
   );
 }
