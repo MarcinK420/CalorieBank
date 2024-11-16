@@ -1,14 +1,27 @@
 import React from "react";
 
-function TrainingList({ entries }) {
+function TrainingList({ entries, onDeleteTraining }) {
     return (
-        <ul>
-        {entries.map((entry) => (
-            <li key={entry.id}>
-            {entry.training}: {entry.calories} kcal burned
-            </li>
-        ))}
-        </ul>
+        <table>
+            <thead>
+                <tr>
+                    <th>Training Activity</th>
+                    <th>Calories Burned</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {entries.map((entry) => (
+                    <tr key={entry.id}>
+                        <td>{entry.training}</td>
+                        <td>{entry.calories} kcal</td>
+                        <td>
+                            <button onClick={() => onDeleteTraining(entry.id)}>Delete</button>
+                        </td>
+                    </tr>
+                ))}
+            </tbody>
+        </table>
     );
 }
 

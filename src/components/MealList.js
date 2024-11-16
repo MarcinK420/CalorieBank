@@ -1,14 +1,27 @@
 import React from 'react';
 
-function MealList({entries}) {
+function MealList({ entries, onDeleteMeal }) {
     return (
-        <ul>
-        {entries.map((entry) => (
-            <li key={entry.id}>
-                {entry.meal}: {entry.calories} kcal
-            </li>
-        ))}
-        </ul>
+        <table>
+            <thead>
+                <tr>
+                    <th>Meal</th>
+                    <th>Calories</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {entries.map((entry) => (
+                    <tr key={entry.id}>
+                        <td>{entry.meal}</td>
+                        <td>{entry.calories} kcal</td>
+                        <td>
+                            <button onClick={() => onDeleteMeal(entry.id)}>Delete</button>
+                        </td>
+                    </tr>
+                ))}
+            </tbody>
+        </table>
     );
 }
 
