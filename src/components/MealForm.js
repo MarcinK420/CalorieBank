@@ -1,15 +1,23 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 
-function MealForm({onAddMeal}) {
+function MealForm({ onAddMeal, onAddFavorite }) {
     const [meal, setMeal] = useState('');
     const [calories, setCalories] = useState('');
 
     const handleSubmit = (e) => {
         e.preventDefault();
         if (meal && calories) {
-            onAddMeal({meal, calories: Number(calories), id: Date.now()});
+            const newMeal = { meal, calories: Number(calories), id: Date.now() };
+            onAddMeal(newMeal);
             setMeal('');
             setCalories('');
+        }
+    };
+
+    const handleAddFavorite = () => {
+        if (meal && calories) {
+            const favoriteMeal = { meal, calories: Number(calories), id: Date.now() };
+            onAddFavorite(favoriteMeal);
         }
     };
 
@@ -30,6 +38,7 @@ function MealForm({onAddMeal}) {
                 required
             />
             <button type="submit">Add Meal</button>
+            <button type="button" onClick={handleAddFavorite}>Add to Favorites</button>
         </form>
     );
 }
