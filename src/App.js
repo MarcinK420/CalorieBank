@@ -43,12 +43,8 @@ function App() {
   const handleReset = () => {
     setMealEntries([]);
     setTrainingEntries([]);
-    setFavoriteMeals([]);
-    setFavoriteTrainings([]);
     localStorage.removeItem('mealEntries');
     localStorage.removeItem('trainingEntries');
-    localStorage.removeItem('favoriteMeals');
-    localStorage.removeItem('favoriteTrainings');
   };
 
   const addFavoriteMeal = (meal) => {
@@ -101,6 +97,14 @@ function App() {
     if (storedTrainings) setTrainingEntries(storedTrainings);
     if (storedFavoriteMeals) setFavoriteMeals(storedFavoriteMeals);
     if (storedFavoriteTrainings) setFavoriteTrainings(storedFavoriteTrainings);
+  }, []);
+
+  // Example for managing favorites separately
+  useEffect(() => {
+    const storedFavoriteMeals = JSON.parse(localStorage.getItem('favoriteMeals')) || [];
+    const storedFavoriteTrainings = JSON.parse(localStorage.getItem('favoriteTrainings')) || [];
+    setFavoriteMeals(storedFavoriteMeals);
+    setFavoriteTrainings(storedFavoriteTrainings);
   }, []);
 
   return (
