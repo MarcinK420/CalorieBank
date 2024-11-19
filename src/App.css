@@ -1,7 +1,22 @@
 /* src/App.css */
+
+/* Add this at the top */
+.background-video {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  min-width: 100%;
+  min-height: 100%;
+  width: auto;
+  height: auto;
+  z-index: -1;
+  transform: translate(-50%, -50%);
+  background-size: cover;
+}
+
 body {
   font-family: Arial, sans-serif;
-  background-color: #f5f5f5;
+  background: transparent;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -72,8 +87,11 @@ button:hover::before {
 
 .container {
   font-family: Arial, sans-serif;
+  background: transparent;
   background-color: #f5f5f5;
   padding: 20px;
+  position: relative;
+  z-index: 1;
 }
 
 h1 {

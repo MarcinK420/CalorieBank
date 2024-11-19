@@ -7,6 +7,7 @@ import CalorieSummary from './components/CalorieSummary';
 import FavoriteMeals from './components/FavoriteMeals';
 import FavoriteTrainings from './components/FavoriteTrainings';
 import './App.css';
+import backgroundVideo from './assets/background.mp4'; // Adjust the path as needed
 
 function App() {
   const [mealEntries, setMealEntries] = useState([]);
@@ -109,6 +110,10 @@ function App() {
 
   return (
     <div className="container">
+      <video className="background-video" autoPlay loop muted>
+        <source src={backgroundVideo} type="video/mp4" />
+        Your browser does not support the video tag.
+      </video>
       <h1>Calorie Counter</h1>
 
       <section>
