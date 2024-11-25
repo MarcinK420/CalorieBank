@@ -10,17 +10,26 @@ import './App.css';
 import backgroundVideo from './assets/background.mp4'; // Adjust the path as needed
 
 function App() {
-  const [mealEntries, setMealEntries] = useState([]);
-  const [trainingEntries, setTrainingEntries] = useState([]);
-  const [favoriteMeals, setFavoriteMeals] = useState([]);
-  const [favoriteTrainings, setFavoriteTrainings] = useState([]);
+  const [mealEntries, setMealEntries] = useState(() => 
+    JSON.parse(localStorage.getItem('mealEntries')) || []
+  );
+  
+  const [trainingEntries, setTrainingEntries] = useState(() => 
+    JSON.parse(localStorage.getItem('trainingEntries')) || []
+  );
+  
+  const [favoriteMeals, setFavoriteMeals] = useState(() => 
+    JSON.parse(localStorage.getItem('favoriteMeals')) || []
+  );
+  
+  const [favoriteTrainings, setFavoriteTrainings] = useState(() => 
+    JSON.parse(localStorage.getItem('favoriteTrainings')) || []
+  );
   const [showFavoriteMeals, setShowFavoriteMeals] = useState(false);
   const [showFavoriteTrainings, setShowFavoriteTrainings] = useState(false);
 
   const handleAddMeal = (meal) => {
-    const updatedMeals = [meal, ...mealEntries];
-    setMealEntries(updatedMeals);
-    localStorage.setItem('mealEntries', JSON.stringify(updatedMeals));
+    setMealEntries((prevEntries) => [...prevEntries, meal]);
   };
 
   const handleAddTraining = (training) => {
@@ -88,33 +97,29 @@ function App() {
     setShowFavoriteTrainings(prev => !prev);
   };
 
+  // Single useEffect for saving updates
   useEffect(() => {
-    const storedMeals = JSON.parse(localStorage.getItem('mealEntries'));
-    const storedTrainings = JSON.parse(localStorage.getItem('trainingEntries'));
-    const storedFavoriteMeals = JSON.parse(localStorage.getItem('favoriteMeals'));
-    const storedFavoriteTrainings = JSON.parse(localStorage.getItem('favoriteTrainings'));
-
-    if (storedMeals) setMealEntries(storedMeals);
-    if (storedTrainings) setTrainingEntries(storedTrainings);
-    if (storedFavoriteMeals) setFavoriteMeals(storedFavoriteMeals);
-    if (storedFavoriteTrainings) setFavoriteTrainings(storedFavoriteTrainings);
-  }, []);
-
-  // Example for managing favorites separately
-  useEffect(() => {
-    const storedFavoriteMeals = JSON.parse(localStorage.getItem('favoriteMeals')) || [];
-    const storedFavoriteTrainings = JSON.parse(localStorage.getItem('favoriteTrainings')) || [];
-    setFavoriteMeals(storedFavoriteMeals);
-    setFavoriteTrainings(storedFavoriteTrainings);
-  }, []);
+    localStorage.setItem('mealEntries', JSON.stringify(mealEntries));
+    localStorage.setItem('trainingEntries', JSON.stringify(trainingEntries));
+    localStorage.setItem('favoriteMeals', JSON.stringify(favoriteMeals));
+    localStorage.setItem('favoriteTrainings', JSON.stringify(favoriteTrainings));
+  }, [mealEntries, trainingEntries, favoriteMeals, favoriteTrainings]);
 
   return (
     <div className="container">
-      <video className="background-video" autoPlay loop muted>
+      <video 
+        autoPlay 
+        muted 
+        loop 
+        playsInline 
+        className="background-video"
+        key="background-video"
+      >
         <source src={backgroundVideo} type="video/mp4" />
         Your browser does not support the video tag.
       </video>
-      <h1>Calorie Counter</h1>
+
+      <h1>Fitness Tracker</h1>
 
       <section>
         <h2>Meals</h2>
@@ -128,40 +133,39 @@ function App() {
         <TrainingList entries={trainingEntries} onDeleteTraining={handleDeleteTraining} />
       </section>
 
-      <CalorieSummary
-        mealEntries={mealEntries}
-        trainingEntries={trainingEntries}
-      />
-
-      <button onClick={handleReset}>Reset</button>
+      <CalorieSummary mealEntries={mealEntries} trainingEntries={trainingEntries} />
 
       <div className="favorites-container">
-        <div className="favorites-section">
+        <section className="favorites-section">
+          <h2>Favorite Meals</h2>
           <button onClick={toggleFavoriteMeals}>
-            {showFavoriteMeals ? 'Hide Favorite Meals' : 'Show Favorite Meals'}
+            {showFavoriteMeals ? 'Hide' : 'Show'} Favorite Meals
           </button>
           {showFavoriteMeals && (
-            <FavoriteMeals 
-              favorites={favoriteMeals} 
-              onUseFavorite={useFavoriteMeal} 
-              onDeleteFavorite={deleteFavoriteMeal} 
+            <FavoriteMeals
+              favorites={favoriteMeals}
+              onUseFavorite={useFavoriteMeal}
+              onDeleteFavorite={deleteFavoriteMeal}
             />
           )}
-        </div>
+        </section>
 
-        <div className="favorites-section">
+        <section className="favorites-section">
+          <h2>Favorite Trainings</h2>
           <button onClick={toggleFavoriteTrainings}>
-            {showFavoriteTrainings ? 'Hide Favorite Trainings' : 'Show Favorite Trainings'}
+            {showFavoriteTrainings ? 'Hide' : 'Show'} Favorite Trainings
           </button>
           {showFavoriteTrainings && (
-            <FavoriteTrainings 
-              favorites={favoriteTrainings} 
-              onUseFavorite={useFavoriteTraining} 
-              onDeleteFavorite={deleteFavoriteTraining} 
+            <FavoriteTrainings
+              favorites={favoriteTrainings}
+              onUseFavorite={useFavoriteTraining}
+              onDeleteFavorite={deleteFavoriteTraining}
             />
           )}
-        </div>
+        </section>
       </div>
+
+      <button onClick={handleReset}>Reset All Data</button>
     </div>
   );
 }
